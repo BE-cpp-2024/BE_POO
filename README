@@ -1,0 +1,43 @@
+# Projet Maison Connectée
+
+Ce projet permet de gérer différents dispositifs d'une maison connectée à l'aide d'un serveur web local. Il utilise un ESP8266, un écran LCD, des capteurs de température et d'humidité, des composants pour un portail, une sonnette et une lumière. Le système est contrôlé via une interface web permettant de manipuler ces dispositifs.
+
+## Composants nécessaires
+
+- **ESP8266** (ou compatible) pour la connexion Wi-Fi et le serveur web
+- **Capteur de distance ultrasonique** (pour détecter la proximité du portail)
+- **Servo-moteur** (pour contrôler l'ouverture/fermeture du portail)
+- **SHT31** (pour mesurer la température et l'humidité)
+- **Écran LCD RGB** pour afficher la température et l'humidité
+- **LED** et **Sonnette** (pour les contrôles d'éclairage et de sonnerie)
+- **Wi-Fi** pour la connexion au réseau local
+
+## Pins utilisées
+
+Voici les pins GPIO de l'ESP8266 utilisées pour les différents composants :
+
+- **D9** : Contrôle de la **LED** (Lumière)
+- **D8** : Contrôle de la **Sonnette**
+- **D7** : Entrée pour le **capteur ultrasonique**
+- **D5** : Contrôle du **servo-moteur** (Portail)
+- **D6** : Entrée pour détecter l'état du **capteur ultrasonique** (utilisé dans la sonnette)
+
+## Fonctionnalités
+
+1. **Contrôle du portail** : L'ouverture et la fermeture du portail se font automatiquement en fonction de la distance détectée par un capteur ultrasonique. Un bouton permet également de contrôler le portail manuellement via l'interface web.
+   
+2. **Gestion de la lumière** : Une LED est contrôlée par un bouton dans l'interface web, permettant de l'allumer ou de l'éteindre.
+
+3. **Sonnette** : Le système de sonnette peut être activé ou désactivé via un bouton de l'interface web. La sonnerie dépend de l'état de la permission d'accès.
+
+4. **Station météo** : Affichage de la température et de l'humidité mesurées par le capteur SHT31. Les valeurs sont affichées sur un écran LCD, et les moyennes sont calculées pour donner des données actualisées.
+
+5. **Interface web** : Une interface web permet de saisir un code pour accéder à un second menu avec des boutons pour contrôler les différents dispositifs (portail, sonnette, lumière). Si le code est correct, un formulaire de contrôle est affiché.
+
+## Configuration
+
+1. **Connexion Wi-Fi** : Le code est pré-configuré pour se connecter à un réseau Wi-Fi avec les paramètres suivants (modifiables dans le fichier `maisonc.h`):
+
+   ```cpp
+   #define STASSID "Votre_SSID"
+   #define STAPSK  "Votre_Mot_De_Passe"
