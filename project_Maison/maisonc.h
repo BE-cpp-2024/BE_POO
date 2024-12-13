@@ -1,24 +1,21 @@
 #ifndef __MAISONC_H__
 #define __MAISONC_H__
 
-#include <iostream>
-#include "Ultrasonic.h"
-#include <Servo.h>
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 #include <Wire.h>
+#include "Ultrasonic.h"
+#include <Servo.h>
 #include "SHT31.h"
-#include <Wire.h>
 #include "rgb_lcd.h"
-#include <Arduino.h>
 #include <list>
 #include <algorithm>
 #include <numeric>
-
 #include <vector>
+
 
 #ifndef STASSID
 #define STASSID "OnePlus 12R"
@@ -28,9 +25,7 @@
 const char* ssid = STASSID;
 const char* password = STAPSK;
 
-
-
-// Page HTML avec un formulaire pour entrer le code
+// HTML Formulaire
 const char* htmlForm = R"(
 <!DOCTYPE html>
 <html lang="fr">
@@ -124,7 +119,6 @@ const char* htmlForm = R"(
 </html>
 )";
 
-// Page HTML avec un formulaire pour entrer le code
 const char* htmlForm2 = R"(
 <!DOCTYPE html>
 <html lang="fr">
@@ -186,7 +180,7 @@ const char* htmlForm2 = R"(
 )";
 
 
-// Classe de base "Maison"
+// Classe de base pour Maison
 class Maison {
 protected : 
   String type;
@@ -275,12 +269,11 @@ protected:
 
 public :
   DectectionPortail():Portail(),ultrasonic(D7){}
-  long Distance(){
-    
+  
+long Distance(){
     return ultrasonic.MeasureInMillimeters();
   }
 };
-
 
 class CmdPortail : public DectectionPortail {
 
@@ -291,8 +284,6 @@ protected :
   int currentPos;
   long lastUpdate;
   bool autorisation;
-
-
 
 public :
   CmdPortail():lastime(0),ouvert(false),currentPos(0),lastUpdate(0){
@@ -406,13 +397,17 @@ StationMeteo s1;
 Sonnette son;
 Lumiere lumi;
 
-class ServeurMaison {
+class ServeurMaison : public Maison {
 private:
   static ESP8266WebServer server;
 
 public:
-  // Constructeur de la classe
-  ServeurMaison() {
+
+  void afficherInfo() const override {
+      Serial.println(type);
+  }
+
+  ServeurMaison():Maison("Serveur") {
     server.on("/", handleRoot);
 
     server.on("/submit", HTTP_POST, handleCodeSubmission);
